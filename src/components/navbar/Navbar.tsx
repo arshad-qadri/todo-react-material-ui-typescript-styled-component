@@ -12,7 +12,7 @@ import {
   Button,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import styled from "styled-components";
+import styled from "@mui/material/styles/styled"; // Use MUI styled instead of styled-components
 import CloseIcon from "@mui/icons-material/Close";
 import { Link, useLocation } from "react-router-dom";
 
@@ -21,8 +21,9 @@ interface NavItem {
   text: string;
   link: string;
 }
+
 interface NavItemTypographyProps {
-  active: boolean;
+  active?: boolean;
 }
 
 const Navbar: React.FC = () => {
@@ -43,13 +44,13 @@ const Navbar: React.FC = () => {
 
   useEffect(() => {
     console.log(location);
-  }, []);
+  }, [location]);
+
   // Mobile drawer content
   const drawer = (
     <List>
       {navItems.map((item) => (
         <ListItem key={item.text} component={"button"}>
-          {/* <ListItemText primary={item.text} /> */}
           <ListItemTextStyle>{item.text}</ListItemTextStyle>
         </ListItem>
       ))}
@@ -69,15 +70,9 @@ const Navbar: React.FC = () => {
             {navItems.map((item) => (
               <NavItemTypography
                 key={item.text}
-                active={
-                  location.pathname === item.link ? true : false
-                }
+                active={location.pathname === item.link}
               >
-                <StyledLink
-                  to={item.link}
-                >
-                  {item.text}
-                </StyledLink>
+                <StyledLink to={item.link}>{item.text}</StyledLink>
               </NavItemTypography>
             ))}
           </DesktopMenu>
@@ -101,7 +96,6 @@ const Navbar: React.FC = () => {
         open={mobileOpen}
         onClose={handleDrawerToggle}
         ModalProps={{ keepMounted: true }} // Better open performance on mobile.
-        // sx={{width:"300px", '& .MuiDrawer-paper':{width:'300px'} }}
         sx={{ width: "250px", flexShrink: 0 }}
         PaperProps={{
           sx: { width: "250px" },
@@ -134,7 +128,10 @@ const MobileMenu = styled(Box)`
   }
 `;
 
-const NavItemTypography = styled(Typography)<NavItemTypographyProps>`
+// Use `shouldForwardProp` to prevent `active` from being passed to the DOM
+const NavItemTypography = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== 'active',
+})<NavItemTypographyProps>`
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
@@ -145,6 +142,7 @@ const NavItemTypography = styled(Typography)<NavItemTypographyProps>`
 const ListItemTextStyle = styled(ListItemText)`
   color: red;
 `;
+
 const CloseButton = styled(Button)`
   padding: 0;
   width: 30px;
@@ -155,5 +153,7 @@ const CloseButton = styled(Button)`
 
 const StyledLink = styled(Link)`
   text-decoration: none;
+  color: inherit;
 `;
+
 export default Navbar;

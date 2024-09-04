@@ -1,7 +1,7 @@
-// pages/Contact.tsx
 import React, { useState } from 'react';
 import { Container, TextField, Button, Typography, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useContactUsMutation } from '../redux/services/contact.api';
 
 const ContactContainer = styled(Container)({
   marginTop: '50px',
@@ -25,15 +25,23 @@ const ContactTextField = styled(TextField)({
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [contactUs, { isLoading, isError, isSuccess, error }] = useContactUsMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert(`Thanks for contacting we will get in touch asap!`);
-    setFormData({ name: '', email: '', message: '' })
+    try {
+      const contactResponse = await contactUs(formData).unwrap(); // Unwraps the mutation to get the result or throw error
+      console.log('Response:', contactResponse);
+      alert('Thanks for contacting us! We will get in touch ASAP.');
+      setFormData({ name: '', email: '', message: '' });
+    } catch (err) {
+      console.error('Error:', err);
+      alert('An error occurred while submitting the form. Please try again later.');
+    }
   };
 
   return (
@@ -75,10 +83,12 @@ const Contact: React.FC = () => {
           value={formData.message}
           onChange={handleChange}
         />
-        <Button type="submit" variant="contained" color="primary" size="large">
-          Send Message
+        <Button type="submit" variant="contained" color="primary" size="large" disabled={isLoading}>
+          {isLoading ? 'Sending...' : 'Send Message'}
         </Button>
       </ContactForm>
+      {isError && <Typography color="error">Error: {(error as any)?.data?.message || 'Submission failed'}</Typography>}
+      {isSuccess && <Typography color="success">Message sent successfully!</Typography>}
     </ContactContainer>
   );
 };
