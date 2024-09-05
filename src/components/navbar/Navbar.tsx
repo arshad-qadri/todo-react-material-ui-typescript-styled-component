@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -42,9 +42,6 @@ const Navbar: React.FC = () => {
     { text: "Contact", link: "/contact" },
   ];
 
-  useEffect(() => {
-    console.log(location);
-  }, [location]);
 
   // Mobile drawer content
   const drawer = (

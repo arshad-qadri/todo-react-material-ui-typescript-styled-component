@@ -56,6 +56,13 @@ export const todoApi = createApi({
       }),
       invalidatesTags: ["todos"],
     }),
+    deleteAllTodos: builder.mutation<IUpdateTodo, void>({
+      query: () => ({
+        url: "/delete-all-todos",
+        method: "DELETE",
+      }),
+      invalidatesTags: ["todos"],
+    }),
   }),
 });
 
@@ -65,4 +72,5 @@ export const {
   useChangeTodoStatusMutation,
   useCreateTodoMutation,
   useDeleteTodoMutation,
+  useDeleteAllTodosMutation
 } = todoApi;

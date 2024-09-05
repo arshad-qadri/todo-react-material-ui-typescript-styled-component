@@ -90,6 +90,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, handleEdit }) => {
           size="small"
           sx={{ padding: "5px" }}
           onClick={() => handleDelete(todo?._id ? todo?._id : "")}
+          title="Delete"
         >
           <DeleteIcon />
         </Button>
@@ -98,6 +99,7 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, handleEdit }) => {
           size="small"
           sx={{ padding: "5px" }}
           onClick={() => handleEdit(todo)}
+          title="Edit"
         >
           <EditIcon />
         </Button>

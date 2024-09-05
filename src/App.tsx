@@ -7,8 +7,8 @@ import Contact from "./pages/Contact";
 
 function App() {
   return (
-    <div className="w-screen bg-gray-100 mx-auto h-screen">
-      <div className="w-10/12 mx-auto bg-white h-full p-5">
+    <div className="w-screen bg-gray-100 mx-auto min-h-screen overflow-x-hidden overflow-y-auto">
+      <div className="md:w-10/12 mx-auto bg-white min-h-screen p-5">
         <Navbar />
         <Routes>
           <Route path="/" element={<Todo />} />
